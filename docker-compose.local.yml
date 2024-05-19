@@ -1,0 +1,25 @@
+version: "3"
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+
+services:
+  postgres:
+    container_name: my_postgres
+    image: postgres:15.4
+    shm_size: "2gb"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test-back
+    volumes:
+      - postgres-data:/var/lib/postgresql/my/data
+    ports:
+      - "5460:5432"
+    networks:
+      - my_network
+    restart: unless-stopped
