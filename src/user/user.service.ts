@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {RegisterUserDto} from "./dtos/register-user.dto";
 import {GetUserDto} from "./dtos/get-user.dto";
 import {EntityManager} from "@mikro-orm/core";
@@ -13,7 +13,6 @@ export class UserService {
     const user = new User();
     user.email = dto.email;
     user.passwordHash = await PasswordEncryptor.cryptPasswordAsync(dto.password);
-
     // way 1
     // this._em.persist(user)
     // await this._em.flush()
@@ -21,6 +20,14 @@ export class UserService {
     //way 2
     await this._em.persistAndFlush(user);
 
+    return GetUserDto.from(user);
+  }
+
+  async getUser(id: string): Promise<GetUserDto> {
+    const user = await this._em.findOne(User, id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
     return GetUserDto.from(user);
   }
 }

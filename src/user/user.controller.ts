@@ -10,4 +10,9 @@ export class UserController {
   createUser(@Body() dto: RegisterUserDto) {
     return this.userService.createUser(dto)
   }
+
+  @Get(":id")
+  getUser(@Param("id") id: string) {
+    return this.userService.getUser(id);
+  }
 }
