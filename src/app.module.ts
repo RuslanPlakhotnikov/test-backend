@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 import { User } from "./user/entities/user";
+import { AuthModule } from './auth/auth.module';
 import * as mikroOrmConfig from "../data/mikro-orm.config";
 
 @Module({
@@ -12,7 +13,8 @@ import * as mikroOrmConfig from "../data/mikro-orm.config";
     UserModule,
     MikroOrmModule.forRootAsync({
       useFactory: () => mikroOrmConfig
-    } as any)
+    } as any),
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

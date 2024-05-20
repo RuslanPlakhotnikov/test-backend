@@ -23,11 +23,19 @@ export class UserService {
     return GetUserDto.from(user);
   }
 
-  async getUser(id: string): Promise<GetUserDto> {
+  async getUserById(id: string): Promise<User> {
     const user = await this._em.findOne(User, id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    return GetUserDto.from(user);
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    const user = await this._em.findOne(User, { email });
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    return user;
   }
 }
