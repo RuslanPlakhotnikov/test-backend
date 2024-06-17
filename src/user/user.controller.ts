@@ -1,7 +1,8 @@
-import {Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UseGuards, Request, ParseUUIDPipe} from '@nestjs/common';
 import {UserService} from "./user.service";
 import {RegisterUserDto} from "./dtos/register-user.dto";
 import {GetUserDto} from "./dtos/get-user.dto";
+import {AuthGuard} from "../auth/guards/auth.guard";
 
 @Controller('user')
 export class UserController {
@@ -12,8 +13,16 @@ export class UserController {
     return this.userService.createUser(dto)
   }
 
+  @UseGuards(AuthGuard)
+  @Get("me")
+  async getMe(@Request() req: any) {
+    const user = await this.userService.getUserById(req.user.sub);
+    return GetUserDto.from(user)
+  }
+
+  @UseGuards(AuthGuard)
   @Get(":id")
-  async getUser(@Param("id") id: string) {
+  async getUser(@Param("id", new ParseUUIDPipe()) id: string) {
     const user = await this.userService.getUserById(id);
     return GetUserDto.from(user)
   }

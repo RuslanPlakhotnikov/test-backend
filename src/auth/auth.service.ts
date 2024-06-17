@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
+import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {UserService} from "../user/user.service";
 import {PasswordEncryptor} from "../../utils/password-encryptor";
 import {LoginDto} from "./dtos/login.dto";
